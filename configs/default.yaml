@@ -1,0 +1,80 @@
+camera:
+  device_id: 0
+  width: 640
+  height: 480
+  fps: 30
+
+background:
+  capture_frames: 30
+  countdown_seconds: 3.0
+  aggregation_method: median
+
+detection:
+  mode: hsv
+  hsv_lower: [85, 50, 50]
+  hsv_upper: [135, 255, 255]
+  debug_view: normal
+  calibration_mode: false
+
+processing:
+  blur_kernel: 3
+  morphology_kernel: 7
+
+mask:
+  median_kernel: 5
+  morphology_kernel: 9
+  open_iterations: 1
+  close_iterations: 3
+  dilation_iterations: 3
+  erosion_iterations: 1
+  min_region_area: 200
+  feather_radius: 5
+
+rendering:
+  use_soft_blend: true
+  blend_alpha: 0.7
+
+temporal:
+  enabled: true
+  ema_alpha: 0.7
+  persistence_frames: 2
+
+adaptive:
+  enabled: true
+  clahe_clip: 2.0
+  clahe_grid: 8
+  brightness_normalize: true
+
+performance:
+  show_fps: true
+  show_perf_overlay: false
+  debug_mode: false
+
+ai:
+  enabled: false
+  fallback_to_hsv: true
+  person_threshold: 0.5
+  model_complexity: 0
+  min_detection_confidence: 0.5
+  min_tracking_confidence: 0.5
+  hybrid_model_path: ""
+  inference_width: 320
+  inference_height: 240
+  inference_frame_skip: 1
+  use_half_precision: false
+  confidence_threshold: 0.5
+
+calibration:
+  roi_fraction: 0.25
+  percentile_low: 2.0
+  percentile_high: 98.0
+  min_pixels: 100
+  h_margin: 8
+  s_margin: 15
+  v_margin: 15
+  use_kmeans: false
+  kmeans_n_clusters: 3
+  use_histogram: true
+  histogram_bins: 50
+  auto_save: true
+  profile_name: default

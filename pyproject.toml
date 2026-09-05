@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blue-invisibility-cloak"
+version = "1.0.0"
+description = "Real-time invisibility cloak effect using OpenCV and HSV color detection"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+    "opencv-python>=4.8.0",
+    "numpy>=1.24.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+]
+ai = [
+    "mediapipe>=0.10.20",
+    "onnxruntime>=1.16.0",
+]
+
+[project.scripts]
+cloak = "cloak.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-v --tb=short"

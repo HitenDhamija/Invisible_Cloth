@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ruff
+.ruff_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project-specific
+*.mp4
+*.avi
+logs/
+
+# Downloaded AI models
+models/
+
+# Recordings and screenshots
+outputs/
+
+# ONNX model files
+*.onnx
+
+# Environment files
+.env
+
+# Experiment tracking
+wandb/
