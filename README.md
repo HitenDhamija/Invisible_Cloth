@@ -1,6 +1,6 @@
 # Blue Invisibility Cloak
 
-![CI](https://img.shields.io/badge/CI-passing-brightgreen)
+![CI](https://github.com/HitenDhamija/Invisible_Cloth/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
 ![OpenCV](https://img.shields.io/badge/OpenCV-4.8%2B-red)
 ![Tests](https://img.shields.io/badge/Tests-386-brightgreen)
