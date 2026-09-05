@@ -28,5 +28,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - run: pip install opencv-python-headless
       - run: pip install -e ".[dev]"
       - run: pytest tests/ -v --tb=short --cov=cloak --cov-report=term-missing
