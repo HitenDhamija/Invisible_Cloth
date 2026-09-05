@@ -25,6 +25,7 @@ def _mask_rect(h: int, w: int, y0: int, y1: int, x0: int, x1: int) -> np.ndarray
 
 def _soft_from_binary(mask: np.ndarray, radius: int = 5) -> np.ndarray:
     import cv2
+
     k = radius * 2 + 1
     soft = mask.astype(np.float32) / 255.0
     return cv2.GaussianBlur(soft, (k, k), 0)
@@ -49,7 +50,7 @@ def soft_renderer() -> InvisibilityRenderer:
 class TestHardComposite:
     def test_masked_region_from_background(self, hard_renderer: InvisibilityRenderer) -> None:
         """Pixels where mask=255 should come from the background."""
-        bg = _solid_bgr(80, 80, (200, 0, 0))    # blue background
+        bg = _solid_bgr(80, 80, (200, 0, 0))  # blue background
         frame = _solid_bgr(80, 80, (0, 0, 200))  # red live frame
         mask = _mask_rect(80, 80, 20, 60, 20, 60)
 
@@ -119,7 +120,9 @@ class TestHardComposite:
 
 
 class TestSoftBlend:
-    def test_masked_region_blends_toward_background(self, soft_renderer: InvisibilityRenderer) -> None:
+    def test_masked_region_blends_toward_background(
+        self, soft_renderer: InvisibilityRenderer
+    ) -> None:
         """Inside the mask, output should be closer to background."""
         bg = _solid_bgr(60, 60, (200, 200, 200))
         frame = _solid_bgr(60, 60, (50, 50, 50))

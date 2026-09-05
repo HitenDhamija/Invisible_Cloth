@@ -20,10 +20,14 @@ def _make_bgr(h: int, w: int, bgr: tuple[int, int, int]) -> np.ndarray:
 
 
 def _make_blue_rect(
-    h: int, w: int,
+    h: int,
+    w: int,
     background_bgr: tuple[int, int, int],
     rect_bgr: tuple[int, int, int],
-    y0: int, y1: int, x0: int, x1: int,
+    y0: int,
+    y1: int,
+    x0: int,
+    x1: int,
 ) -> np.ndarray:
     """Create a frame with a rectangle of *rect_bgr* inside *background_bgr*."""
     frame = _make_bgr(h, w, background_bgr)
@@ -63,9 +67,7 @@ def processing_cfg() -> ProcessingConfig:
 
 
 @pytest.fixture
-def detector(
-    detection_cfg: DetectionConfig, processing_cfg: ProcessingConfig
-) -> BlueColorDetector:
+def detector(detection_cfg: DetectionConfig, processing_cfg: ProcessingConfig) -> BlueColorDetector:
     return BlueColorDetector(detection_cfg, processing_cfg)
 
 

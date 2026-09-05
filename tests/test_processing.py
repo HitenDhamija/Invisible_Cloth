@@ -21,8 +21,12 @@ def _full_mask(h: int = 100, w: int = 100) -> np.ndarray:
 
 
 def _rect_mask(
-    h: int, w: int,
-    y0: int, y1: int, x0: int, x1: int,
+    h: int,
+    w: int,
+    y0: int,
+    y1: int,
+    x0: int,
+    x1: int,
 ) -> np.ndarray:
     mask = _empty_mask(h, w)
     mask[y0:y1, x0:x1] = 255
@@ -30,7 +34,8 @@ def _rect_mask(
 
 
 def _noisy_mask(
-    h: int, w: int,
+    h: int,
+    w: int,
     region: tuple[int, int, int, int] | None = None,
     noise_count: int = 50,
     rng_seed: int = 42,
@@ -48,7 +53,8 @@ def _noisy_mask(
 
 
 def _mask_with_hole(
-    h: int = 100, w: int = 100,
+    h: int = 100,
+    w: int = 100,
     hole: tuple[int, int, int, int] = (40, 60, 40, 60),
 ) -> np.ndarray:
     """Large filled region with a rectangular hole in the center."""
@@ -59,7 +65,8 @@ def _mask_with_hole(
 
 
 def _multi_region_mask(
-    h: int = 200, w: int = 200,
+    h: int = 200,
+    w: int = 200,
 ) -> tuple[np.ndarray, int]:
     """One large region + several small regions. Returns (mask, expected_large)."""
     mask = _empty_mask(h, w)
@@ -68,7 +75,7 @@ def _multi_region_mask(
     # Small regions: 10x10 = 100 px each
     for i in range(5):
         y = 10 + i * 20
-        mask[y:y + 10, 150:160] = 255
+        mask[y : y + 10, 150:160] = 255
     return mask, 1
 
 
@@ -244,7 +251,7 @@ class TestComponentFiltering:
         # Five 5x5 regions = 25 px each
         for i in range(5):
             y = 10 + i * 15
-            mask[y:y + 5, 10:15] = 255
+            mask[y : y + 5, 10:15] = 255
 
         cfg = MaskConfig(
             median_kernel=1,

@@ -15,7 +15,6 @@ Usage as script:
     python evaluate_mask.py
 """
 
-
 import numpy as np
 
 
@@ -74,9 +73,7 @@ class MaskEvaluator:
 
         intersection = np.logical_and(pred, gt).sum()
 
-        return float(
-            (2.0 * intersection + self.smooth) / (pred.sum() + gt.sum() + self.smooth)
-        )
+        return float((2.0 * intersection + self.smooth) / (pred.sum() + gt.sum() + self.smooth))
 
     def precision(self, predicted: np.ndarray, ground_truth: np.ndarray) -> float:
         """Precision: fraction of predicted mask pixels that are correct.
@@ -120,9 +117,7 @@ class MaskEvaluator:
         intersection = np.logical_and(pred, gt).sum()
         return float(intersection / gt.sum())
 
-    def evaluate(
-        self, predicted: np.ndarray, ground_truth: np.ndarray
-    ) -> dict[str, float]:
+    def evaluate(self, predicted: np.ndarray, ground_truth: np.ndarray) -> dict[str, float]:
         """Compute all metrics at once.
 
         Args:
@@ -145,9 +140,7 @@ class MaskEvaluator:
         return mask.astype(bool)
 
 
-def compare_masks(
-    predicted: np.ndarray, ground_truth: np.ndarray
-) -> dict[str, float]:
+def compare_masks(predicted: np.ndarray, ground_truth: np.ndarray) -> dict[str, float]:
     """Compare two binary masks and return all metrics.
 
     Args:
@@ -235,14 +228,14 @@ def generate_synthetic_data(
     cy_gt, cx_gt = h // 2, w // 2
     yy, xx = np.ogrid[:h, :w]
     radius_gt = min(h, w) // 4
-    gt_mask = (yy - cy_gt) ** 2 + (xx - cx_gt) ** 2 <= radius_gt ** 2
+    gt_mask = (yy - cy_gt) ** 2 + (xx - cx_gt) ** 2 <= radius_gt**2
     gt[gt_mask] = True
 
     pred = np.zeros(shape, dtype=bool)
     max_offset = radius_gt
     offset_x = int(max_offset * (1.0 - overlap_ratio))
     cy_pred, cx_pred = cy_gt, cx_gt + offset_x
-    pred_mask = (yy - cy_pred) ** 2 + (xx - cx_pred) ** 2 <= radius_gt ** 2
+    pred_mask = (yy - cy_pred) ** 2 + (xx - cx_pred) ** 2 <= radius_gt**2
     pred[pred_mask] = True
 
     return pred, gt

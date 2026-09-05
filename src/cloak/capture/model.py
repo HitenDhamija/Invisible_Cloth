@@ -165,9 +165,7 @@ class BackgroundModel:
         # Collect the frame
         self._frame_buffer.append(frame.copy())
         self._frames_collected += 1
-        logger.debug(
-            "Captured frame %d/%d", self._frames_collected, required
-        )
+        logger.debug("Captured frame %d/%d", self._frames_collected, required)
 
         self._draw_capturing_status(display)
 
@@ -179,9 +177,7 @@ class BackgroundModel:
         method = self._config.aggregation_method
         aggregator = _AGGREGATORS.get(method)
         if aggregator is None:
-            raise BackgroundCaptureError(
-                f"Unknown aggregation method: {method!r}"
-            )
+            raise BackgroundCaptureError(f"Unknown aggregation method: {method!r}")
 
         try:
             bg_float = aggregator(self._frame_buffer)

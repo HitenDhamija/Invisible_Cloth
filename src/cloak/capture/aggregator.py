@@ -28,16 +28,13 @@ def _validate_frames(frames: list[np.ndarray], min_frames: int = 1) -> None:
         raise AggregationError("Cannot aggregate an empty list of frames")
 
     if len(frames) < min_frames:
-        raise AggregationError(
-            f"Need at least {min_frames} frame(s), got {len(frames)}"
-        )
+        raise AggregationError(f"Need at least {min_frames} frame(s), got {len(frames)}")
 
     reference_shape = frames[0].shape
     for idx, frame in enumerate(frames[1:], start=2):
         if frame.shape != reference_shape:
             raise AggregationError(
-                f"Frame 1 has shape {reference_shape}, but frame {idx} "
-                f"has shape {frame.shape}"
+                f"Frame 1 has shape {reference_shape}, but frame {idx} has shape {frame.shape}"
             )
 
 

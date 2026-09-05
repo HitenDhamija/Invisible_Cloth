@@ -47,24 +47,12 @@ class HSVCalibrator:
         cv2.namedWindow(_WINDOW, cv2.WINDOW_NORMAL)
         cv2.resizeWindow(_WINDOW, 600, 400)
 
-        cv2.createTrackbar(
-            _TRACKBAR_H_MIN, _WINDOW, initial_lower[0], 179, lambda _: None
-        )
-        cv2.createTrackbar(
-            _TRACKBAR_H_MAX, _WINDOW, initial_upper[0], 179, lambda _: None
-        )
-        cv2.createTrackbar(
-            _TRACKBAR_S_MIN, _WINDOW, initial_lower[1], 255, lambda _: None
-        )
-        cv2.createTrackbar(
-            _TRACKBAR_S_MAX, _WINDOW, initial_upper[1], 255, lambda _: None
-        )
-        cv2.createTrackbar(
-            _TRACKBAR_V_MIN, _WINDOW, initial_lower[2], 255, lambda _: None
-        )
-        cv2.createTrackbar(
-            _TRACKBAR_V_MAX, _WINDOW, initial_upper[2], 255, lambda _: None
-        )
+        cv2.createTrackbar(_TRACKBAR_H_MIN, _WINDOW, initial_lower[0], 179, lambda _: None)
+        cv2.createTrackbar(_TRACKBAR_H_MAX, _WINDOW, initial_upper[0], 179, lambda _: None)
+        cv2.createTrackbar(_TRACKBAR_S_MIN, _WINDOW, initial_lower[1], 255, lambda _: None)
+        cv2.createTrackbar(_TRACKBAR_S_MAX, _WINDOW, initial_upper[1], 255, lambda _: None)
+        cv2.createTrackbar(_TRACKBAR_V_MIN, _WINDOW, initial_lower[2], 255, lambda _: None)
+        cv2.createTrackbar(_TRACKBAR_V_MAX, _WINDOW, initial_upper[2], 255, lambda _: None)
 
         self._ready = True
         logger.info("HSV Calibrator window created")
@@ -153,8 +141,13 @@ class HSVCalibrator:
         # Bounds + stats
         info = f"Lower: {lower}  Upper: {upper}  Blue: {stats.cloak_ratio:.1%}"
         cv2.putText(
-            combined, info, (10, combined.shape[0] - 10),
-            font, 0.5, (200, 200, 200), 1,
+            combined,
+            info,
+            (10, combined.shape[0] - 10),
+            font,
+            0.5,
+            (200, 200, 200),
+            1,
         )
 
         cv2.imshow(_WINDOW, combined)

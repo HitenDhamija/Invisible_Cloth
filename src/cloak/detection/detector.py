@@ -139,19 +139,14 @@ class BlueColorDetector:
 
     # -- statistics -----------------------------------------------------------
 
-    def _compute_stats(
-        self, mask: np.ndarray, frame_shape: tuple[int, ...]
-    ) -> DetectionStats:
+    def _compute_stats(self, mask: np.ndarray, frame_shape: tuple[int, ...]) -> DetectionStats:
         total = mask.shape[0] * mask.shape[1]
         cloak = int(cv2.countNonZero(mask))
         ratio = cloak / total if total > 0 else 0.0
 
         warning: str | None = None
         if ratio > _SAFETY_RATIO:
-            warning = (
-                f"Detection threshold may be too broad — "
-                f"{ratio:.0%} of frame is blue"
-            )
+            warning = f"Detection threshold may be too broad — {ratio:.0%} of frame is blue"
             logger.warning(warning)
 
         return DetectionStats(

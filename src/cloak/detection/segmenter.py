@@ -68,7 +68,10 @@ class AIHybridDetector:
         self._model_manager = ModelManager(ai_cfg)
         self._ai_cfg = ai_cfg
         self._stats = DetectionStats(
-            total_pixels=0, cloak_pixels=0, cloak_ratio=0.0, warning=None,
+            total_pixels=0,
+            cloak_pixels=0,
+            cloak_ratio=0.0,
+            warning=None,
         )
 
         # Frame skipping for inference optimization
@@ -109,7 +112,9 @@ class AIHybridDetector:
         self._hsv_detector.set_bounds(lower, upper)
 
     def detect(
-        self, frame: np.ndarray, timestamp_ms: int = 0,
+        self,
+        frame: np.ndarray,
+        timestamp_ms: int = 0,
     ) -> tuple[np.ndarray, DetectionStats]:
         """Detect blue cloth constrained to AI-segmented person region.
 
@@ -137,8 +142,10 @@ class AIHybridDetector:
             else:
                 # Return empty mask
                 self._stats = DetectionStats(
-                    total_pixels=h * w, cloak_pixels=0,
-                    cloak_ratio=0.0, warning=None,
+                    total_pixels=h * w,
+                    cloak_pixels=0,
+                    cloak_ratio=0.0,
+                    warning=None,
                 )
                 return np.zeros((h, w), dtype=np.uint8), self._stats
 
@@ -160,7 +167,9 @@ class AIHybridDetector:
         return final_mask, self._stats
 
     def detect_blue_region(
-        self, frame: np.ndarray, mask: np.ndarray,
+        self,
+        frame: np.ndarray,
+        mask: np.ndarray,
     ) -> np.ndarray:
         """Return original frame with non-blue areas blacked out."""
         return self._hsv_detector.detect_blue_region(frame, mask)
@@ -172,7 +181,10 @@ class AIHybridDetector:
     # -- internals ------------------------------------------------------------
 
     def _get_person_mask(
-        self, frame: np.ndarray, h: int, w: int,
+        self,
+        frame: np.ndarray,
+        h: int,
+        w: int,
     ) -> np.ndarray | None:
         """Get person mask with frame skipping and caching.
 
@@ -192,7 +204,8 @@ class AIHybridDetector:
                 # Ensure mask matches frame dimensions
                 if raw_mask.shape != (h, w):
                     raw_mask = cv2.resize(
-                        raw_mask, (w, h),
+                        raw_mask,
+                        (w, h),
                         interpolation=cv2.INTER_NEAREST,
                     )
 

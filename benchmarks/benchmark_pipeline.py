@@ -43,8 +43,12 @@ from cloak.rendering.renderer import InvisibilityRenderer
 # Synthetic frame generation
 # ---------------------------------------------------------------------------
 
+
 def _make_synthetic_frame(
-    h: int, w: int, frame_idx: int, bg: np.ndarray,
+    h: int,
+    w: int,
+    frame_idx: int,
+    bg: np.ndarray,
 ) -> np.ndarray:
     """Generate a synthetic frame with a moving blue rectangle on a static background."""
     frame = bg.copy()
@@ -63,6 +67,7 @@ def _make_synthetic_frame(
 # ---------------------------------------------------------------------------
 # Statistics helpers
 # ---------------------------------------------------------------------------
+
 
 def _percentile(data: list[float], p: float) -> float:
     """Compute the p-th percentile of a list of floats."""
@@ -182,6 +187,7 @@ def benchmark_pipeline(
 # Report formatting
 # ---------------------------------------------------------------------------
 
+
 def _print_report(result: dict, width: int, height: int) -> None:
     """Print a formatted benchmark report."""
     print()
@@ -263,14 +269,19 @@ def _print_report(result: dict, width: int, height: int) -> None:
 # Main
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Pipeline benchmark with per-stage timing breakdown",
     )
-    parser.add_argument("--frames", type=int, default=150, help="Number of benchmark frames (default: 150)")
+    parser.add_argument(
+        "--frames", type=int, default=150, help="Number of benchmark frames (default: 150)"
+    )
     parser.add_argument("--width", type=int, default=640, help="Frame width (default: 640)")
     parser.add_argument("--height", type=int, default=480, help="Frame height (default: 480)")
-    parser.add_argument("--warmup", type=int, default=10, help="Warmup frames not counted (default: 10)")
+    parser.add_argument(
+        "--warmup", type=int, default=10, help="Warmup frames not counted (default: 10)"
+    )
     args = parser.parse_args()
 
     total_frames = args.frames + args.warmup
@@ -288,8 +299,13 @@ def main() -> None:
 
     print(f"Running benchmark ({args.frames} frames, warmup={args.warmup})...")
     result = benchmark_pipeline(
-        frames, bg,
-        det_cfg, proc_cfg, mask_cfg, temporal_cfg, rendering_cfg,
+        frames,
+        bg,
+        det_cfg,
+        proc_cfg,
+        mask_cfg,
+        temporal_cfg,
+        rendering_cfg,
         warmup=args.warmup,
     )
 

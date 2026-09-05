@@ -34,8 +34,10 @@ class TestBrightnessNormalization:
 
     def test_dark_frame_brightened(self):
         cfg = AdaptiveConfig(
-            enabled=True, brightness_normalize=True,
-            clahe_clip=0.5, clahe_grid=8,
+            enabled=True,
+            brightness_normalize=True,
+            clahe_clip=0.5,
+            clahe_grid=8,
         )
         preprocessor = AdaptivePreprocessor(cfg)
         dark = _dark_frame()
@@ -46,8 +48,10 @@ class TestBrightnessNormalization:
 
     def test_bright_frame_darkened(self):
         cfg = AdaptiveConfig(
-            enabled=True, brightness_normalize=True,
-            clahe_clip=0.5, clahe_grid=8,
+            enabled=True,
+            brightness_normalize=True,
+            clahe_clip=0.5,
+            clahe_grid=8,
         )
         preprocessor = AdaptivePreprocessor(cfg)
         bright = _bright_frame()
@@ -65,8 +69,10 @@ class TestCLAHE:
 
     def test_clahe_changes_output(self):
         cfg = AdaptiveConfig(
-            enabled=True, brightness_normalize=False,
-            clahe_clip=2.0, clahe_grid=8,
+            enabled=True,
+            brightness_normalize=False,
+            clahe_clip=2.0,
+            clahe_grid=8,
         )
         preprocessor = AdaptivePreprocessor(cfg)
         frame = _normal_frame()

@@ -12,7 +12,9 @@ from cloak.detection.segmenter import AIHybridDetector
 # -- helpers -------------------------------------------------------------------
 
 
-def _make_bgr(h: int = 100, w: int = 100, bgr: tuple[int, int, int] = (128, 128, 128)) -> np.ndarray:
+def _make_bgr(
+    h: int = 100, w: int = 100, bgr: tuple[int, int, int] = (128, 128, 128)
+) -> np.ndarray:
     frame = np.zeros((h, w, 3), dtype=np.uint8)
     frame[:, :] = bgr
     return frame

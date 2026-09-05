@@ -83,9 +83,7 @@ class TemporalMaskSmoother:
 
         # Threshold: midpoint of the alpha-scaled range
         threshold = alpha * 127.0
-        binary = np.where(
-            self._accumulated >= threshold, np.uint8(255), np.uint8(0)
-        )
+        binary = np.where(self._accumulated >= threshold, np.uint8(255), np.uint8(0))
 
         # Persistence: keep recently-active pixels ON
         persistence = self._cfg.persistence_frames

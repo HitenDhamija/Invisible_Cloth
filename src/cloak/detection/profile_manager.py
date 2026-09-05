@@ -122,9 +122,7 @@ class ProfileManager:
             required = ["hsv_lower", "hsv_upper"]
             for field in required:
                 if field not in profile:
-                    raise ProfileManagerError(
-                        f"Profile missing required field: {field}"
-                    )
+                    raise ProfileManagerError(f"Profile missing required field: {field}")
 
             logger.info("Profile loaded: %s", path)
             return profile

@@ -150,10 +150,6 @@ class InvisibilityRenderer:
         mask: np.ndarray,
     ) -> None:
         if frame.shape != background.shape:
-            raise RenderError(
-                f"Frame shape {frame.shape} != background shape {background.shape}"
-            )
+            raise RenderError(f"Frame shape {frame.shape} != background shape {background.shape}")
         if mask.shape[:2] != frame.shape[:2]:
-            raise RenderError(
-                f"Mask shape {mask.shape} != frame shape {frame.shape}"
-            )
+            raise RenderError(f"Mask shape {mask.shape} != frame shape {frame.shape}")

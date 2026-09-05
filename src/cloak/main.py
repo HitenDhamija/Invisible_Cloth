@@ -85,23 +85,28 @@ def _parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
-        "-c", "--config",
-        type=str, default=None,
+        "-c",
+        "--config",
+        type=str,
+        default=None,
         help="Path to a YAML configuration file (default: configs/default.yaml)",
     )
     parser.add_argument(
         "--camera",
-        type=int, default=None,
+        type=int,
+        default=None,
         help="Camera device index (overrides config)",
     )
     parser.add_argument(
         "--video",
-        type=str, default=None,
+        type=str,
+        default=None,
         help="Path to a video file to use instead of a live camera",
     )
     parser.add_argument(
         "--mode",
-        type=str, default=None,
+        type=str,
+        default=None,
         choices=["hsv", "person_aware_hsv", "ai_hybrid"],
         help="Detection mode (overrides config)",
     )
@@ -112,7 +117,8 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--profile",
-        type=str, default=None,
+        type=str,
+        default=None,
         help="Load a saved calibration profile by name",
     )
     parser.add_argument(
@@ -122,12 +128,14 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--resolution",
-        type=str, default=None,
+        type=str,
+        default=None,
         help="Camera resolution as WIDTHxHEIGHT (e.g. 1280x720)",
     )
     parser.add_argument(
         "--fps",
-        type=int, default=None,
+        type=int,
+        default=None,
         help="Camera FPS (overrides config)",
     )
     return parser.parse_args()
@@ -136,32 +144,48 @@ def _parse_args() -> argparse.Namespace:
 def _apply_cli_overrides(config: CloakConfig, args: argparse.Namespace) -> CloakConfig:
     """Apply command-line overrides to the loaded config."""
     if args.camera is not None:
-        config = config.model_copy(update={"camera": config.camera.model_copy(update={"device_id": args.camera})})
+        config = config.model_copy(
+            update={"camera": config.camera.model_copy(update={"device_id": args.camera})}
+        )
     if args.video is not None:
-        config = config.model_copy(update={"camera": config.camera.model_copy(update={"video_path": args.video})})
+        config = config.model_copy(
+            update={"camera": config.camera.model_copy(update={"video_path": args.video})}
+        )
     if args.mode is not None:
-        config = config.model_copy(update={"detection": config.detection.model_copy(update={"mode": args.mode})})
+        config = config.model_copy(
+            update={"detection": config.detection.model_copy(update={"mode": args.mode})}
+        )
     if args.debug:
-        config = config.model_copy(update={
-            "performance": config.performance.model_copy(update={"debug_mode": True, "show_perf_overlay": True}),
-        })
+        config = config.model_copy(
+            update={
+                "performance": config.performance.model_copy(
+                    update={"debug_mode": True, "show_perf_overlay": True}
+                ),
+            }
+        )
     if args.no_ai:
-        config = config.model_copy(update={
-            "detection": config.detection.model_copy(update={"mode": "hsv"}),
-            "ai": config.ai.model_copy(update={"enabled": False}),
-        })
+        config = config.model_copy(
+            update={
+                "detection": config.detection.model_copy(update={"mode": "hsv"}),
+                "ai": config.ai.model_copy(update={"enabled": False}),
+            }
+        )
     if args.resolution:
         try:
             w, h = args.resolution.lower().split("x")
-            config = config.model_copy(update={
-                "camera": config.camera.model_copy(update={"width": int(w), "height": int(h)}),
-            })
+            config = config.model_copy(
+                update={
+                    "camera": config.camera.model_copy(update={"width": int(w), "height": int(h)}),
+                }
+            )
         except (ValueError, TypeError):
             logger.warning("Invalid resolution format '%s', expected WIDTHxHEIGHT", args.resolution)
     if args.fps is not None:
-        config = config.model_copy(update={
-            "camera": config.camera.model_copy(update={"fps": args.fps}),
-        })
+        config = config.model_copy(
+            update={
+                "camera": config.camera.model_copy(update={"fps": args.fps}),
+            }
+        )
     return config
 
 
@@ -256,9 +280,11 @@ def _show_welcome_screen() -> None:
     clicked = [False]
 
     def _on_mouse(event, x, y, flags, param):
-        if (event == cv2.EVENT_LBUTTONDOWN
-                and btn_x <= x <= btn_x + btn_w
-                and btn_y <= y <= btn_y + btn_h):
+        if (
+            event == cv2.EVENT_LBUTTONDOWN
+            and btn_x <= x <= btn_x + btn_w
+            and btn_y <= y <= btn_y + btn_h
+        ):
             clicked[0] = True
 
     cv2.namedWindow(_WINDOW_NAME, cv2.WINDOW_NORMAL)
@@ -267,8 +293,12 @@ def _show_welcome_screen() -> None:
 
     while not clicked[0]:
         overlay = frame.copy()
-        cv2.rectangle(overlay, (btn_rect[0], btn_rect[1]), (btn_rect[2], btn_rect[3]), (0, 180, 80), -1)
-        cv2.rectangle(overlay, (btn_rect[0], btn_rect[1]), (btn_rect[2], btn_rect[3]), (0, 220, 100), 2)
+        cv2.rectangle(
+            overlay, (btn_rect[0], btn_rect[1]), (btn_rect[2], btn_rect[3]), (0, 180, 80), -1
+        )
+        cv2.rectangle(
+            overlay, (btn_rect[0], btn_rect[1]), (btn_rect[2], btn_rect[3]), (0, 220, 100), 2
+        )
         cv2.putText(overlay, "NEXT  >", (cx - 45, btn_y + 38), font, 0.9, (255, 255, 255), 2)
         cv2.imshow(_WINDOW_NAME, overlay)
         key = cv2.waitKey(30) & 0xFF
@@ -298,16 +328,20 @@ def run(config: CloakConfig) -> None:
     if config.detection.mode == "person_aware_hsv":
         try:
             person_detector = PersonAwareDetector(
-                config.detection, config.processing, config.ai,
+                config.detection,
+                config.processing,
+                config.ai,
             )
             detector = person_detector.hsv_detector
         except PersonDetectorError as exc:
             error_display.show("AI model unavailable — switched to HSV", duration=6.0)
             logger.error("Failed to initialize person detector: %s", exc)
             if config.ai.fallback_to_hsv:
-                config = config.model_copy(update={
-                    "detection": config.detection.model_copy(update={"mode": "hsv"}),
-                })
+                config = config.model_copy(
+                    update={
+                        "detection": config.detection.model_copy(update={"mode": "hsv"}),
+                    }
+                )
             else:
                 app.force_error(str(exc))
                 _run_error_loop(config, app, error_display)
@@ -315,16 +349,20 @@ def run(config: CloakConfig) -> None:
     elif config.detection.mode == "ai_hybrid":
         try:
             hybrid_detector = AIHybridDetector(
-                config.detection, config.processing, config.ai,
+                config.detection,
+                config.processing,
+                config.ai,
             )
             detector = hybrid_detector.hsv_detector
         except ModelManagerError as exc:
             error_display.show("AI model unavailable — switched to HSV", duration=6.0)
             logger.error("Failed to initialize AI hybrid detector: %s", exc)
             if config.ai.fallback_to_hsv:
-                config = config.model_copy(update={
-                    "detection": config.detection.model_copy(update={"mode": "hsv"}),
-                })
+                config = config.model_copy(
+                    update={
+                        "detection": config.detection.model_copy(update={"mode": "hsv"}),
+                    }
+                )
             else:
                 app.force_error(str(exc))
                 _run_error_loop(config, app, error_display)
@@ -411,11 +449,13 @@ def run(config: CloakConfig) -> None:
                 perf_tracker.start("detect")
                 if hybrid_detector is not None:
                     raw_mask, mask_stats = hybrid_detector.detect(
-                        detect_frame, frame_timestamp,
+                        detect_frame,
+                        frame_timestamp,
                     )
                 elif person_detector is not None:
                     raw_mask, mask_stats = person_detector.detect(
-                        detect_frame, frame_timestamp,
+                        detect_frame,
+                        frame_timestamp,
                     )
                 else:
                     raw_mask, mask_stats = detector.detect(detect_frame)
@@ -443,18 +483,30 @@ def run(config: CloakConfig) -> None:
                         display = frame.copy()
                 else:
                     display = _apply_debug_view(
-                        display, frame, raw_mask, smooth_mask,
-                        detector, debug_view, person_detector,
-                        hybrid_detector, config,
+                        display,
+                        frame,
+                        raw_mask,
+                        smooth_mask,
+                        detector,
+                        debug_view,
+                        person_detector,
+                        hybrid_detector,
+                        config,
                     )
                 perf_tracker.stop("render")
 
                 # Save debug frame for screenshot
                 if config.output.screenshot_debug:
                     debug_frame = _apply_debug_view(
-                        display.copy(), frame, raw_mask, smooth_mask,
-                        detector, debug_view, person_detector,
-                        hybrid_detector, config,
+                        display.copy(),
+                        frame,
+                        raw_mask,
+                        smooth_mask,
+                        detector,
+                        debug_view,
+                        person_detector,
+                        hybrid_detector,
+                        config,
                     )
 
             perf_tracker.stop_frame()
@@ -471,9 +523,16 @@ def run(config: CloakConfig) -> None:
                 _draw_perf_overlay(display, perf_tracker, config, hybrid_detector)
 
             _draw_status_bar(
-                display, app, bg_model, debug_view,
-                mask_stats, refinement_stats,
-                show_rendered, renderer, smoother, config,
+                display,
+                app,
+                bg_model,
+                debug_view,
+                mask_stats,
+                refinement_stats,
+                show_rendered,
+                renderer,
+                smoother,
+                config,
                 recorder,
             )
 
@@ -554,8 +613,10 @@ def run(config: CloakConfig) -> None:
                 else:
                     try:
                         path = recorder.start(
-                            config.camera.width, config.camera.height,
-                            config.recording.fps, config.recording.codec,
+                            config.camera.width,
+                            config.camera.height,
+                            config.recording.fps,
+                            config.recording.codec,
                         )
                         error_display.show(f"Recording: {path.name}", duration=3.0)
                     except Exception as exc:
@@ -579,22 +640,34 @@ def run(config: CloakConfig) -> None:
             elif key == _KEY_M:
                 if hybrid_detector is not None:
                     if config.detection.mode == "ai_hybrid":
-                        config = config.model_copy(update={
-                            "detection": config.detection.model_copy(update={"mode": "hsv"}),
-                        })
+                        config = config.model_copy(
+                            update={
+                                "detection": config.detection.model_copy(update={"mode": "hsv"}),
+                            }
+                        )
                     else:
-                        config = config.model_copy(update={
-                            "detection": config.detection.model_copy(update={"mode": "ai_hybrid"}),
-                        })
+                        config = config.model_copy(
+                            update={
+                                "detection": config.detection.model_copy(
+                                    update={"mode": "ai_hybrid"}
+                                ),
+                            }
+                        )
                 elif person_detector is not None:
                     if config.detection.mode == "person_aware_hsv":
-                        config = config.model_copy(update={
-                            "detection": config.detection.model_copy(update={"mode": "hsv"}),
-                        })
+                        config = config.model_copy(
+                            update={
+                                "detection": config.detection.model_copy(update={"mode": "hsv"}),
+                            }
+                        )
                     else:
-                        config = config.model_copy(update={
-                            "detection": config.detection.model_copy(update={"mode": "person_aware_hsv"}),
-                        })
+                        config = config.model_copy(
+                            update={
+                                "detection": config.detection.model_copy(
+                                    update={"mode": "person_aware_hsv"}
+                                ),
+                            }
+                        )
 
             elif key == _KEY_D:
                 bg_model.debug_enabled = not bg_model.debug_enabled
@@ -663,17 +736,32 @@ def _run_error_loop(
     while True:
         frame = np.zeros((240, 320, 3), dtype=np.uint8)
         cv2.putText(
-            frame, "Blue Invisibility Cloak", (30, 80),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 200, 200), 1,
+            frame,
+            "Blue Invisibility Cloak",
+            (30, 80),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.7,
+            (200, 200, 200),
+            1,
         )
         if app.error_message:
             cv2.putText(
-                frame, app.error_message[:50], (30, 130),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1,
+                frame,
+                app.error_message[:50],
+                (30, 130),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                (0, 0, 255),
+                1,
             )
         cv2.putText(
-            frame,             "Press ESC to quit, B to retry", (30, 200),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (150, 150, 150), 1,
+            frame,
+            "Press ESC to quit, B to retry",
+            (30, 200),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.5,
+            (150, 150, 150),
+            1,
         )
         error_display.render(frame)
         cv2.imshow(_WINDOW_NAME, frame)
@@ -715,7 +803,8 @@ def _apply_debug_view(
             return cv2.cvtColor(person_mask, cv2.COLOR_GRAY2BGR)
         elif person_detector is not None:
             person_mask = person_detector.person_detector.detect(
-                frame, int(time.time() * 1000),
+                frame,
+                int(time.time() * 1000),
             )
             vis = (person_mask * 255).astype(np.uint8)
             return cv2.cvtColor(vis, cv2.COLOR_GRAY2BGR)
@@ -766,11 +855,13 @@ def _build_intersection_panel(
     blue_bgr = cv2.cvtColor(blue_mask, cv2.COLOR_GRAY2BGR)
     person_bgr = cv2.cvtColor(person_binary, cv2.COLOR_GRAY2BGR)
     final_bgr = cv2.cvtColor(final_mask, cv2.COLOR_GRAY2BGR)
-    panels = np.hstack([
-        cv2.resize(blue_bgr, (third_w, h)),
-        cv2.resize(person_bgr, (third_w, h)),
-        cv2.resize(final_bgr, (third_w, h)),
-    ])
+    panels = np.hstack(
+        [
+            cv2.resize(blue_bgr, (third_w, h)),
+            cv2.resize(person_bgr, (third_w, h)),
+            cv2.resize(final_bgr, (third_w, h)),
+        ]
+    )
     font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(panels, "HSV mask", (10, 30), font, 0.6, (0, 255, 255), 2)
     cv2.putText(panels, "Person mask", (third_w + 10, 30), font, 0.6, (0, 255, 255), 2)
@@ -795,11 +886,13 @@ def _build_hybrid_panel(
     blue_bgr = cv2.cvtColor(blue_mask, cv2.COLOR_GRAY2BGR)
     person_bgr = cv2.cvtColor(person_mask, cv2.COLOR_GRAY2BGR)
     final_bgr = cv2.cvtColor(final_mask, cv2.COLOR_GRAY2BGR)
-    panels = np.hstack([
-        cv2.resize(blue_bgr, (third_w, h)),
-        cv2.resize(person_bgr, (third_w, h)),
-        cv2.resize(final_bgr, (third_w, h)),
-    ])
+    panels = np.hstack(
+        [
+            cv2.resize(blue_bgr, (third_w, h)),
+            cv2.resize(person_bgr, (third_w, h)),
+            cv2.resize(final_bgr, (third_w, h)),
+        ]
+    )
     font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(panels, "HSV mask", (10, 30), font, 0.6, (0, 255, 255), 2)
     cv2.putText(panels, "AI person", (third_w + 10, 30), font, 0.6, (0, 255, 255), 2)
@@ -825,7 +918,9 @@ def _draw_fps(frame: cv2.Mat) -> None:  # type: ignore[type-arg]
     else:
         fps = 0.0
     if fps > 0:
-        cv2.putText(frame, f"FPS: {fps:.1f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+        cv2.putText(
+            frame, f"FPS: {fps:.1f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2
+        )
 
 
 # -- performance overlay ------------------------------------------------------

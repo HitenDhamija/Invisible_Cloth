@@ -157,7 +157,8 @@ class AutoCalibrator:
         if len(pixels) < self._cfg.min_pixels:
             logger.warning(
                 "Insufficient pixels: %d < %d",
-                len(pixels), self._cfg.min_pixels,
+                len(pixels),
+                self._cfg.min_pixels,
             )
             self._state = CalibrationState.COLLECTING
             return None
@@ -176,7 +177,9 @@ class AutoCalibrator:
         # Optional K-means clustering
         if self._cfg.use_kmeans:
             lower, upper, median, iqr = self._kmeans_refine(
-                pixels, lower, upper,
+                pixels,
+                lower,
+                upper,
             )
             method = "kmeans" if not self._cfg.use_histogram else "kmeans+histogram"
 
@@ -202,7 +205,10 @@ class AutoCalibrator:
         self._state = CalibrationState.PREVIEW
         logger.info(
             "Calibration computed: lower=%s upper=%s method=%s pixels=%d",
-            lower, upper, method, len(pixels),
+            lower,
+            upper,
+            method,
+            len(pixels),
         )
         return self._result
 
@@ -250,7 +256,8 @@ class AutoCalibrator:
     # -- statistics -----------------------------------------------------------
 
     def _compute_percentile_bounds(
-        self, pixels: np.ndarray,
+        self,
+        pixels: np.ndarray,
     ) -> tuple[list[float], list[float], np.ndarray, np.ndarray]:
         """Compute HSV bounds using percentile + IQR.
 
@@ -301,7 +308,8 @@ class AutoCalibrator:
         for ch in range(3):
             channel_data = pixels[:, ch]
             hist, bin_edges = np.histogram(
-                channel_data, bins=n_bins,
+                channel_data,
+                bins=n_bins,
                 range=(0, 179 if ch == 0 else 255),
             )
 
@@ -314,7 +322,9 @@ class AutoCalibrator:
 
             if len(above) > 0:
                 hist_low = bin_edges[above[0]]
-                hist_high = bin_edges[above[-1] + 1] if above[-1] + 1 < len(bin_edges) else bin_edges[-1]
+                hist_high = (
+                    bin_edges[above[-1] + 1] if above[-1] + 1 < len(bin_edges) else bin_edges[-1]
+                )
 
                 # Widen slightly to be safe
                 margin = [self._cfg.h_margin, self._cfg.s_margin, self._cfg.v_margin][ch]
@@ -377,7 +387,7 @@ class AutoCalibrator:
         criteria = (
             cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER,
             30,  # max iterations
-            1.0, # epsilon
+            1.0,  # epsilon
         )
 
         # K-means expects float32 data
@@ -385,8 +395,11 @@ class AutoCalibrator:
 
         try:
             compactness, labels, centers = cv2.kmeans(
-                sample_f32, n_clusters, None,
-                criteria, 10,  # attempts
+                sample_f32,
+                n_clusters,
+                None,
+                criteria,
+                10,  # attempts
                 cv2.KMEANS_PP_CENTERS,
             )
         except cv2.error:
@@ -398,7 +411,7 @@ class AutoCalibrator:
         # Find the largest cluster
         unique, counts = np.unique(labels, return_counts=True)
         largest_cluster_idx = unique[np.argmax(counts)]
-        cluster_mask = (labels.flatten() == largest_cluster_idx)
+        cluster_mask = labels.flatten() == largest_cluster_idx
         cluster_pixels = sample[cluster_mask]
 
         # Compute bounds from the largest cluster only
@@ -446,8 +459,7 @@ class AutoCalibrator:
         cv2.addWeighted(overlay, 0.4, frame, 0.6, 0, frame)
 
         # Clear the ROI area
-        frame[y0 : y0 + rh, x0 : x0 + rw] = \
-            frame[y0 : y0 + rh, x0 : x0 + rw].copy()
+        frame[y0 : y0 + rh, x0 : x0 + rw] = frame[y0 : y0 + rh, x0 : x0 + rw].copy()
 
         # Draw ROI border
         cv2.rectangle(frame, (x0, y0), (x0 + rw, y0 + rh), (0, 255, 255), 2)
@@ -523,8 +535,13 @@ class AutoCalibrator:
         ]
         for i, line in enumerate(info_lines):
             cv2.putText(
-                combined, line, (10, combined.shape[0] - 10 - (len(info_lines) - 1 - i) * 22),
-                font, 0.5, (200, 200, 200), 1,
+                combined,
+                line,
+                (10, combined.shape[0] - 10 - (len(info_lines) - 1 - i) * 22),
+                font,
+                0.5,
+                (200, 200, 200),
+                1,
             )
 
         cv2.imshow(_WINDOW, combined)
@@ -532,5 +549,6 @@ class AutoCalibrator:
     def destroy(self) -> None:
         """Close calibration window."""
         import contextlib
+
         with contextlib.suppress(cv2.error):
             cv2.destroyWindow(_WINDOW)

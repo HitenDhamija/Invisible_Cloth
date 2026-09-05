@@ -136,8 +136,12 @@ class VideoRecorder:
             return True
         except Exception as exc:
             self._consecutive_failures += 1
-            logger.warning("Failed to write frame (%d consecutive): %s",
-                          self._consecutive_failures, exc, exc_info=True)
+            logger.warning(
+                "Failed to write frame (%d consecutive): %s",
+                self._consecutive_failures,
+                exc,
+                exc_info=True,
+            )
             if self._consecutive_failures >= 10:
                 logger.error("Too many consecutive write failures, stopping recording")
                 self.stop()
@@ -163,7 +167,9 @@ class VideoRecorder:
         if path:
             logger.info(
                 "Recording stopped: %s (%d frames, %.1fs)",
-                path, self._frame_count, duration,
+                path,
+                self._frame_count,
+                duration,
             )
 
         return path

@@ -192,10 +192,7 @@ class ModelManager:
         """Download YOLOv8n-seg ONNX model if not present."""
         import urllib.request
 
-        url = (
-            "https://github.com/ultralytics/assets/releases/download/v8.2.0/"
-            f"{model_name}"
-        )
+        url = f"https://github.com/ultralytics/assets/releases/download/v8.2.0/{model_name}"
         dest.parent.mkdir(parents=True, exist_ok=True)
         logger.info("Downloading segmentation model: %s", model_name)
         try:
@@ -224,9 +221,7 @@ class ModelManager:
 
         # Create session options
         sess_opts = ort.SessionOptions()
-        sess_opts.graph_optimization_level = (
-            ort.GraphOptimizationLevel.ORT_ENABLE_ALL
-        )
+        sess_opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
         sess_opts.inter_op_num_threads = 1
         sess_opts.intra_op_num_threads = 2
 
@@ -237,9 +232,7 @@ class ModelManager:
                 providers=providers,
             )
         except Exception as exc:
-            raise ModelManagerError(
-                f"Failed to create ONNX session: {exc}"
-            ) from exc
+            raise ModelManagerError(f"Failed to create ONNX session: {exc}") from exc
 
         # Read input metadata
         self._input_name = self._session.get_inputs()[0].name
@@ -252,7 +245,10 @@ class ModelManager:
         )
 
     def _postprocess(
-        self, outputs: list[np.ndarray], target_h: int, target_w: int,
+        self,
+        outputs: list[np.ndarray],
+        target_h: int,
+        target_w: int,
     ) -> np.ndarray:
         """Convert raw model output to a binary person mask.
 
@@ -294,7 +290,10 @@ class ModelManager:
         return binary
 
     def _parse_yolo_output(
-        self, raw: np.ndarray, target_h: int, target_w: int,
+        self,
+        raw: np.ndarray,
+        target_h: int,
+        target_w: int,
     ) -> np.ndarray:
         """Parse YOLOv8 segmentation output into a person mask.
 
@@ -337,8 +336,6 @@ class ModelManager:
             x1 = min(target_w, int((cx + w / 2) * target_w))
             y1 = min(target_h, int((cy + h / 2) * target_h))
             if x1 > x0 and y1 > y0:
-                activation[y0:y1, x0:x1] = max(
-                    activation[y0:y1, x0:x1].max(), person_scores[i]
-                )
+                activation[y0:y1, x0:x1] = max(activation[y0:y1, x0:x1].max(), person_scores[i])
 
         return activation

@@ -13,7 +13,9 @@ from cloak.detection.auto_calibrator import AutoCalibrator, CalibrationResult, C
 # -- helpers -------------------------------------------------------------------
 
 
-def _make_bgr(h: int = 100, w: int = 100, bgr: tuple[int, int, int] = (128, 128, 128)) -> np.ndarray:
+def _make_bgr(
+    h: int = 100, w: int = 100, bgr: tuple[int, int, int] = (128, 128, 128)
+) -> np.ndarray:
     frame = np.zeros((h, w, 3), dtype=np.uint8)
     frame[:, :] = bgr
     return frame
@@ -28,7 +30,8 @@ def _make_blue_frame(h: int = 100, w: int = 100) -> np.ndarray:
 
 
 def _make_blue_rect_frame(
-    h: int = 100, w: int = 100,
+    h: int = 100,
+    w: int = 100,
     fill_fraction: float = 0.9,
 ) -> np.ndarray:
     """Create a frame with blue filling most of the ROI area."""
@@ -39,7 +42,8 @@ def _make_blue_rect_frame(
 
 
 def _make_frame_with_outliers(
-    h: int = 100, w: int = 100,
+    h: int = 100,
+    w: int = 100,
     main_bgr: tuple[int, int, int] = (255, 50, 30),
     outlier_bgr: tuple[int, int, int] = (0, 0, 255),
     outlier_fraction: float = 0.02,
@@ -196,7 +200,8 @@ class TestPercentileAlgorithm:
 
         # Frame with blue center and red outliers
         frame = _make_frame_with_outliers(
-            h=100, w=100,
+            h=100,
+            w=100,
             main_bgr=(255, 50, 30),  # blue
             outlier_bgr=(0, 0, 255),  # red
             outlier_fraction=0.02,
@@ -248,7 +253,9 @@ class TestHistogramRefinement:
 
     def test_histogram_method_label(self):
         cal_cfg = _default_cal_config(
-            roi_fraction=0.8, use_histogram=True, use_kmeans=False,
+            roi_fraction=0.8,
+            use_histogram=True,
+            use_kmeans=False,
         )
         det_cfg = _default_detection_config()
         cal = AutoCalibrator(cal_cfg, det_cfg)
@@ -261,7 +268,8 @@ class TestHistogramRefinement:
         """Histogram refinement should produce equal or tighter bounds."""
         # Without histogram
         cal_cfg_no_hist = _default_cal_config(
-            roi_fraction=0.8, use_histogram=False,
+            roi_fraction=0.8,
+            use_histogram=False,
         )
         det_cfg = _default_detection_config()
         cal_no_hist = AutoCalibrator(cal_cfg_no_hist, det_cfg)
@@ -271,7 +279,8 @@ class TestHistogramRefinement:
 
         # With histogram
         cal_cfg_hist = _default_cal_config(
-            roi_fraction=0.8, use_histogram=True,
+            roi_fraction=0.8,
+            use_histogram=True,
         )
         cal_hist = AutoCalibrator(cal_cfg_hist, det_cfg)
         cal_hist.start(frame.shape)
@@ -291,7 +300,9 @@ class TestKMeansRefinement:
 
     def test_kmeans_method_label(self):
         cal_cfg = _default_cal_config(
-            roi_fraction=0.8, use_kmeans=True, use_histogram=False,
+            roi_fraction=0.8,
+            use_kmeans=True,
+            use_histogram=False,
         )
         det_cfg = _default_detection_config()
         cal = AutoCalibrator(cal_cfg, det_cfg)
@@ -303,7 +314,9 @@ class TestKMeansRefinement:
     def test_kmeans_single_cluster_comparable(self):
         """With varied color, K-means and percentile should produce valid bounds."""
         cal_cfg_perc = _default_cal_config(
-            roi_fraction=0.8, use_kmeans=False, use_histogram=False,
+            roi_fraction=0.8,
+            use_kmeans=False,
+            use_histogram=False,
         )
         det_cfg = _default_detection_config()
         cal_perc = AutoCalibrator(cal_cfg_perc, det_cfg)
@@ -317,16 +330,18 @@ class TestKMeansRefinement:
                 s_val = 225 + rng.integers(-10, 11)
                 v_val = 255 + rng.integers(-20, 21)
                 frame[y, x] = cv2.cvtColor(
-                    np.uint8([[[np.clip(h_val, 0, 179),
-                                np.clip(s_val, 0, 255),
-                                np.clip(v_val, 0, 255)]]]),
+                    np.uint8(
+                        [[[np.clip(h_val, 0, 179), np.clip(s_val, 0, 255), np.clip(v_val, 0, 255)]]]
+                    ),
                     cv2.COLOR_HSV2BGR,
                 )[0, 0]
         cal_perc.start(frame.shape)
         r1 = cal_perc.collect(frame)
 
         cal_cfg_km = _default_cal_config(
-            roi_fraction=0.8, use_kmeans=True, use_histogram=False,
+            roi_fraction=0.8,
+            use_kmeans=True,
+            use_histogram=False,
         )
         cal_km = AutoCalibrator(cal_cfg_km, det_cfg)
         cal_km.start(frame.shape)

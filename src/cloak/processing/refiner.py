@@ -78,9 +78,7 @@ class MaskRefiner:
 
     # -- main entry point -----------------------------------------------------
 
-    def refine(
-        self, raw_mask: np.ndarray
-    ) -> tuple[np.ndarray, np.ndarray | None, RefinementStats]:
+    def refine(self, raw_mask: np.ndarray) -> tuple[np.ndarray, np.ndarray | None, RefinementStats]:
         """Run the full refinement pipeline.
 
         Args:
@@ -169,9 +167,7 @@ class MaskRefiner:
             return mask
         return cv2.erode(mask, self._kernel, iterations=iters)
 
-    def _filter_components(
-        self, mask: np.ndarray
-    ) -> tuple[np.ndarray, int, int]:
+    def _filter_components(self, mask: np.ndarray) -> tuple[np.ndarray, int, int]:
         """Remove connected components smaller than min_region_area.
 
         Returns:
@@ -181,9 +177,7 @@ class MaskRefiner:
         if min_area <= 0:
             return mask, 0, 0
 
-        num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(
-            mask, connectivity=8
-        )
+        num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(mask, connectivity=8)
 
         # Label 0 is always the background
         total = num_labels - 1

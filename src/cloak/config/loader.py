@@ -11,7 +11,9 @@ from cloak.config.schemas import CloakConfig
 
 logger = logging.getLogger(__name__)
 
-_DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent.parent.parent.parent / "configs" / "default.yaml"
+_DEFAULT_CONFIG_PATH = (
+    Path(__file__).resolve().parent.parent.parent.parent / "configs" / "default.yaml"
+)
 
 
 def load_config(config_path: str | Path | None = None) -> CloakConfig:

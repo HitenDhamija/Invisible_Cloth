@@ -174,7 +174,8 @@ class TestPipelineWithSoftBlend:
 
     def test_soft_blend_output_valid(self) -> None:
         det_cfg, proc_cfg, mask_cfg, render_cfg, _ = _pipeline_configs(
-            soft_blend=True, feather_radius=7,
+            soft_blend=True,
+            feather_radius=7,
         )
         detector = BlueColorDetector(det_cfg, proc_cfg)
         refiner = MaskRefiner(mask_cfg)

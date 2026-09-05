@@ -38,7 +38,9 @@ from cloak.detection.segmenter import AIHybridDetector
 
 
 def _make_synthetic_frame(
-    h: int, w: int, frame_idx: int,
+    h: int,
+    w: int,
+    frame_idx: int,
 ) -> np.ndarray:
     """Generate a synthetic frame with a moving blue rectangle.
 
@@ -205,8 +207,7 @@ def _print_results(results: list[dict]) -> None:
     print("DETECTION MODE BENCHMARK RESULTS")
     print("=" * 72)
     print(
-        f"{'Mode':<22} {'FPS':>8} {'Latency':>10} "
-        f"{'AI Infer':>10} {'Stability':>10} {'Frames':>8}"
+        f"{'Mode':<22} {'FPS':>8} {'Latency':>10} {'AI Infer':>10} {'Stability':>10} {'Frames':>8}"
     )
     print("-" * 72)
 
@@ -243,10 +244,11 @@ def main() -> None:
     parser.add_argument("--warmup", type=int, default=10, help="Warmup frames (not counted)")
     args = parser.parse_args()
 
-    print(f"Generating {args.frames + args.warmup} synthetic frames ({args.width}x{args.height})...")
+    print(
+        f"Generating {args.frames + args.warmup} synthetic frames ({args.width}x{args.height})..."
+    )
     all_frames = [
-        _make_synthetic_frame(args.height, args.width, i)
-        for i in range(args.frames + args.warmup)
+        _make_synthetic_frame(args.height, args.width, i) for i in range(args.frames + args.warmup)
     ]
     warmup_frames = all_frames[: args.warmup]
     bench_frames = all_frames[args.warmup :]

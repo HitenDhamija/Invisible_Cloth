@@ -102,8 +102,13 @@ class HelpOverlay:
         title_size = cv2.getTextSize(title, font, 0.65, 2)[0]
         title_x = x0 + (panel_w - title_size[0]) // 2
         cv2.putText(
-            frame, title, (title_x, y0 + title_height - 8),
-            font, 0.65, (0, 255, 255), 2,
+            frame,
+            title,
+            (title_x, y0 + title_height - 8),
+            font,
+            0.65,
+            (0, 255, 255),
+            2,
         )
 
         # Divider
@@ -111,7 +116,8 @@ class HelpOverlay:
             frame,
             (x0 + padding, y0 + title_height),
             (x0 + panel_w - padding, y0 + title_height),
-            (60, 60, 60), 1,
+            (60, 60, 60),
+            1,
         )
 
         # Controls
@@ -120,15 +126,25 @@ class HelpOverlay:
 
             # Key in yellow
             cv2.putText(
-                frame, key, (x0 + padding, y),
-                font, 0.48, (0, 220, 255), 1,
+                frame,
+                key,
+                (x0 + padding, y),
+                font,
+                0.48,
+                (0, 220, 255),
+                1,
             )
 
             # Description in white
             key_width = cv2.getTextSize(key, font, 0.48, 1)[0][0]
             cv2.putText(
-                frame, desc, (x0 + padding + key_width + 16, y),
-                font, 0.48, (220, 220, 220), 1,
+                frame,
+                desc,
+                (x0 + padding + key_width + 16, y),
+                font,
+                0.48,
+                (220, 220, 220),
+                1,
             )
 
         # Footer
@@ -136,6 +152,11 @@ class HelpOverlay:
         footer_size = cv2.getTextSize(footer, font, 0.4, 1)[0]
         footer_x = x0 + (panel_w - footer_size[0]) // 2
         cv2.putText(
-            frame, footer, (footer_x, y0 + panel_h - 10),
-            font, 0.4, (120, 120, 120), 1,
+            frame,
+            footer,
+            (footer_x, y0 + panel_h - 10),
+            font,
+            0.4,
+            (120, 120, 120),
+            1,
         )

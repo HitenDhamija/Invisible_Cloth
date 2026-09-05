@@ -11,9 +11,7 @@ import sys
 import numpy as np
 import pytest
 
-sys.path.insert(
-    0, os.path.join(os.path.dirname(__file__), "..", "benchmarks")
-)
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "benchmarks"))
 from evaluate_mask import MaskEvaluator, compare_masks, print_report
 
 

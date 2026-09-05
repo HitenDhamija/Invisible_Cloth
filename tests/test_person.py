@@ -15,7 +15,9 @@ from cloak.detection.person_aware import PersonAwareDetector
 # -- helpers -------------------------------------------------------------------
 
 
-def _make_bgr(h: int = 100, w: int = 100, bgr: tuple[int, int, int] = (128, 128, 128)) -> np.ndarray:
+def _make_bgr(
+    h: int = 100, w: int = 100, bgr: tuple[int, int, int] = (128, 128, 128)
+) -> np.ndarray:
     frame = np.zeros((h, w, 3), dtype=np.uint8)
     frame[:, :] = bgr
     return frame
@@ -246,6 +248,7 @@ class TestCloakConfigAI:
 
     def test_ai_section_present(self):
         from cloak.config.schemas import CloakConfig
+
         cfg = CloakConfig()
         assert hasattr(cfg, "ai")
         assert isinstance(cfg.ai, AIConfig)

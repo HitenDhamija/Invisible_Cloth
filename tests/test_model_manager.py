@@ -14,7 +14,9 @@ from cloak.detection.model_manager import ModelManager, ModelManagerError
 # -- helpers -------------------------------------------------------------------
 
 
-def _make_bgr(h: int = 240, w: int = 320, bgr: tuple[int, int, int] = (128, 128, 128)) -> np.ndarray:
+def _make_bgr(
+    h: int = 240, w: int = 320, bgr: tuple[int, int, int] = (128, 128, 128)
+) -> np.ndarray:
     frame = np.zeros((h, w, 3), dtype=np.uint8)
     frame[:, :] = bgr
     return frame

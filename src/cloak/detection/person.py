@@ -58,9 +58,7 @@ class PersonDetector:
                 "Install it with: pip install mediapipe"
             ) from exc
 
-        model_name = _MODEL_NAME.get(
-            self._cfg.model_complexity, "pose_landmarker_lite.task"
-        )
+        model_name = _MODEL_NAME.get(self._cfg.model_complexity, "pose_landmarker_lite.task")
         model_path = _MODEL_DIR / model_name
 
         if not model_path.exists():

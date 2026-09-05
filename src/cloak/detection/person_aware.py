@@ -37,7 +37,10 @@ class PersonAwareDetector:
         self._person_detector = PersonDetector(ai_cfg)
         self._ai_cfg = ai_cfg
         self._stats = DetectionStats(
-            total_pixels=0, cloak_pixels=0, cloak_ratio=0.0, warning=None,
+            total_pixels=0,
+            cloak_pixels=0,
+            cloak_ratio=0.0,
+            warning=None,
         )
 
     @property
@@ -60,7 +63,9 @@ class PersonAwareDetector:
         self._hsv_detector.set_bounds(lower, upper)
 
     def detect(
-        self, frame: np.ndarray, timestamp_ms: int = 0,
+        self,
+        frame: np.ndarray,
+        timestamp_ms: int = 0,
     ) -> tuple[np.ndarray, DetectionStats]:
         """Detect blue cloth constrained to person region.
 
@@ -105,7 +110,9 @@ class PersonAwareDetector:
         return final_mask, self._stats
 
     def detect_blue_region(
-        self, frame: np.ndarray, mask: np.ndarray,
+        self,
+        frame: np.ndarray,
+        mask: np.ndarray,
     ) -> np.ndarray:
         """Extract blue region using mask."""
         return self._hsv_detector.detect_blue_region(frame, mask)

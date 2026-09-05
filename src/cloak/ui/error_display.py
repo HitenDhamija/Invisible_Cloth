@@ -89,6 +89,11 @@ class ErrorDisplay:
         text_size = cv2.getTextSize(text, font, 0.55, 1)[0]
         tx = max(10, (w - text_size[0]) // 2)
         cv2.putText(
-            frame, text, (tx, bar_h - 12),
-            font, 0.55, (255, 255, 255), 1,
+            frame,
+            text,
+            (tx, bar_h - 12),
+            font,
+            0.55,
+            (255, 255, 255),
+            1,
         )
